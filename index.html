@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Algoritmus-portfólió</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/registry.js"></script>
+  <script src="js/ui.js"></script>
+</head>
+<body>
+  <div class="home">
+    <section class="hero">
+      <span class="eyebrow">SZTE · Algoritmizálás és problémamegoldás tanítása</span>
+      <h1>Algoritmus-portfólió</h1>
+      <p class="subtitle">Digitális kultúra tanári mesterszak · 7. és 10. évfolyam</p>
+      <p class="lead">
+        Három algoritmus, <strong>lépésenként lejátszva</strong>: a Collatz-sorozat, a maximumkiválasztás és a Hanoi tornyai.
+        Minden feladatnál látszik a Python-kód kiemelt aktuális sorral, a változók értéke, a ciklus és a hívási verem állapota,
+        mellette pedig egy feladatspecifikus rajz. A bemenet szabadon módosítható, a link az aktuális bemenetet is megőrzi.
+        Minden feladathoz kérdések is tartoznak a csoportnak. A 7. évfolyamos feladatoknál magyar pszeudokód nézet is van.
+      </p>
+      <div class="stats">
+        <div class="stat"><b>3</b><span>animált feladat</span></div>
+        <div class="stat"><b>7. és 10.</b><span>évfolyam</span></div>
+        <div class="stat"><b>3</b><span>tananyagrész</span></div>
+        <div class="stat"><b>Python</b><span>valódi futással ellenőrizve</span></div>
+      </div>
+      <p class="kbd-hint">A lejátszóban: <kbd>→</kbd> lépés · <kbd>←</kbd> vissza · <kbd>Szóköz</kbd> lejátszás/szünet · <kbd>Home</kbd>/<kbd>End</kbd> eleje/vége</p>
+    </section>
+
+    <h2>Feladatok évfolyamonként</h2>
+    <div id="grades"></div>
+
+    <h2>Lefedettség</h2>
+    <table class="matrix">
+      <thead><tr><th>Tananyagrész</th><th>Feladat</th></tr></thead>
+      <tbody>
+        <tr><td>Ciklus, változó, elágazás</td><td>7/A, 7/B</td></tr>
+        <tr><td>Maximumkeresés</td><td>7/B</td></tr>
+        <tr><td>Rekurzió, hívási verem</td><td>10/A</td></tr>
+      </tbody>
+    </table>
+
+    <footer>
+      A Python-kódok a <code>python/</code> mappában külön is megtalálhatók és futtathatók.
+      A lejátszás nem valódi Python-futtatás: a lépéseket feladatonként egy JavaScript-generátor állítja elő,
+      amelynek kimenetét a <code>tools/check.js</code> a valódi Python-futtatással veti össze.
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const h = UI.h;
+      const card = (task) => h("a", { class: "card", href: "task.html?id=" + task.id }, [
+        h("h3", {}, [h("span", { class: "code-tag", text: task.code }), task.title]),
+        h("div", { class: "chips" }, [
+          h("span", { class: "chip level-" + task.level, text: LEVEL_LABELS[task.level] }),
+          ...task.topic.map((topic) => h("span", { class: "chip topic", text: topic })),
+        ]),
+        h("p", { text: task.summary }),
+        h("span", { class: "open", text: "Megnyitás →" }),
+      ]);
+      const grades = [...new Set(TASK_INDEX.map((task) => task.grade))];
+      const container = document.getElementById("grades");
+      for (const grade of grades) {
+        container.appendChild(h("div", { class: "grade-row" }, [
+          h("div", { class: "grade-name" }, [h("b", { text: grade + "." }), "évfolyam"]),
+          h("div", { class: "cards" }, TASK_INDEX.filter((task) => task.grade === grade).map(card)),
+        ]));
+      }
+    })();
+  </script>
+</body>
+</html>
